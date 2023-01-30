@@ -86,7 +86,6 @@ router.patch('/update/status/:id', async (req: Request, res: Response, next: Nex
 
 router.delete('/delete/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const newOrder: IOrder = req.body;
     const { id } = req.params;
     const response = await fs.readFile("pedidos.json");
     const data: IFileOrders = JSON.parse(response.toString());
@@ -97,6 +96,62 @@ router.delete('/delete/:id', async (req: Request, res: Response, next: NextFunct
       return res.status(202).json(newData);
     }
     return res.status(404).json({ message: "Invalid order" });
+  } catch (error) {
+    next(error);
+  }
+})
+
+router.get('/total/client', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { cliente } = req.body;
+    const response = await fs.readFile("pedidos.json");
+    const data: IFileOrders = JSON.parse(response.toString());
+    const value = data.pedidos.reduce((acc, order, i) => {
+      if (order.cliente === cliente && order.entregue) {
+        return acc += order.valor;
+      }
+      return acc;
+    }, 0)
+    return res.status(200).json({ value })
+  } catch (error) {
+    next(error);
+  }
+})
+
+router.get('/total/product', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { produto } = req.body;
+    const response = await fs.readFile("pedidos.json");
+    const data: IFileOrders = JSON.parse(response.toString());
+    const value = data.pedidos.reduce((acc, order, i) => {
+      if (order.produto === produto && order.entregue) {
+        return acc += order.valor;
+      }
+      return acc;
+    }, 0)
+    return res.status(200).json({ value })
+  } catch (error) {
+    next(error);
+  }
+})
+
+router.get('/most-sold', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const response = await fs.readFile("pedidos.json");
+    const data: IFileOrders = JSON.parse(response.toString());
+    
+  } catch (error) {
+    next(error);
+  }
+})
+
+router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { id } = req.params;
+    const response = await fs.readFile("pedidos.json");
+    const data: IFileOrders = JSON.parse(response.toString());
+    const order = data.pedidos.find((order) => order.id === Number(id));
+    return order ? res.status(200).json(order) : res.status(404).json({ message: "User not found" });
   } catch (error) {
     next(error);
   }
