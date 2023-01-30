@@ -1,5 +1,5 @@
 export default interface IOrder {
-  id?: number;
+  id: number;
   cliente: string;
   produto: string;
   valor: number;
