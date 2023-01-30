@@ -5,6 +5,6 @@ const app = express();
 
 app.use(express.json());
 
-app.use(DeliveryRouter);
+app.use('/order', DeliveryRouter);
 
 export default app;
