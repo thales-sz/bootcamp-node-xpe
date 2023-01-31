@@ -139,7 +139,11 @@ router.get('/most-sold', async (req: Request, res: Response, next: NextFunction)
   try {
     const response = await fs.readFile("pedidos.json");
     const data: IFileOrders = JSON.parse(response.toString());
-    
+    const mostSold: any = {};
+    data.pedidos.forEach((order) => {
+      if (order.entregue) return mostSold[order.produto] = (mostSold[order.produto] || 0) + 1
+    });
+    return res.status(200).json(mostSold);
   } catch (error) {
     next(error);
   }
