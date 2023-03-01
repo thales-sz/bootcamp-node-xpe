@@ -41,7 +41,7 @@ function getRole(username) {
 	// de um banco de dados, servidor de autorização, etc.
     if (username == 'admin') {
         return 'admin'
-    } else if (username == 'angelo') {
+    } else if (username == 'angel') {
         return 'role1'
     }
 }
